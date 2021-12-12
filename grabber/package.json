@@ -1,0 +1,13 @@
+{
+  "name": "data-grabber",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "pr-data": "node ./get-pr-data.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "@octokit/rest": "^18.12.0"
+  },
+  "devDependencies": {}
+}

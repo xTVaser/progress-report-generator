@@ -8,25 +8,12 @@ import * as fs from 'fs';
 
 const rl = readline.createInterface({ input, output });
 
-let token = ""; // TODO - get the token
+let token = "";
 let startTime = "";
 let endTime = "";
 
-const octokit = new Octokit({
-  auth: token,
-  userAgent: "PCSX2/PCSX2.github.io",
-  log: {
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    debug: () => { },
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    info: () => { },
-    warn: console.warn,
-    error: console.error,
-  },
-});
-
-async function grabPullRequestInfo(start_time, end_time, cursor) {
-  const response = await octokit.graphql(
+async function grabPullRequestInfo(client, start_time, end_time, cursor) {
+  const response = await client.graphql(
     `
     query ($queryInput: String!, $after: String) {
       search(query: $queryInput, type: ISSUE, first: 100, after:$after) {
@@ -70,6 +57,18 @@ async function grabPullRequestInfo(start_time, end_time, cursor) {
 
 rl.question("GitHub PAT?", (answer) => {
   token = answer;
+  const octokit = new Octokit({
+    auth: token,
+    userAgent: "PCSX2/PCSX2.github.io",
+    log: {
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      debug: () => { },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      info: () => { },
+      warn: console.warn,
+      error: console.error,
+    },
+  });
   rl.question("Start Date?", (answer) => {
     startTime = answer;
     rl.question("End Date?", async (answer) => {
@@ -78,7 +77,7 @@ rl.question("GitHub PAT?", (answer) => {
       let cursor = null;
       let prInfo = []
       while (paginate) {
-        const resp = await grabPullRequestInfo(startTime, endTime, cursor);
+        const resp = await grabPullRequestInfo(octokit, startTime, endTime, cursor);
         if (resp.search.pageInfo.hasNextPage) {
           cursor = resp.search.pageInfo.endCursor;
         } else {

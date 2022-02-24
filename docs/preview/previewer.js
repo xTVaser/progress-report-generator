@@ -50,7 +50,7 @@ function generateHTML(contents) {
   html += `<h2 class="contentheading"><a href="#">${data.name}</a></h2>\n`;
 
   // Core Improvements
-  html += `<h1>Core Improvements</h1>\n`
+  html += `<h1 style="margin-top: 1em; margin-bottom: 1em">Core Improvements</h1>\n`
   // - Dev9
   html += itemsToHtml(data, "DEV9");
   // - Counters
@@ -76,15 +76,17 @@ function generateHTML(contents) {
   // - IPU
   html += itemsToHtml(data, "IPU");
 
-  html += `<hr>\n`
+  html += `<hr style="margin-top: 1em; margin-bottom: 1em">\n`
 
   // GS Improvements
+  html += `<h1 style="margin-top: 1em; margin-bottom: 1em">GS Improvements</h1>\n`
   // - GS
   html += itemsToHtml(data, "GS");
 
-  html += `<hr>\n`
+  html += `<hr style="margin-top: 1em; margin-bottom: 1em">\n`
 
   // Misc Improvements
+  html += `<h1 style="margin-top: 1em; margin-bottom: 1em">Miscellaneous Improvements</h1>\n`
   // - Debugger
   html += itemsToHtml(data, "Debugger");
   // - GUI
@@ -95,12 +97,12 @@ function generateHTML(contents) {
   html += itemsToHtml(data, "Other");
   html += itemsToHtml(data, "Ambiguous");
 
-  html += `<hr>\n`
+  html += `<hr style="margin-top: 1em; margin-bottom: 1em">\n`
 
   // Maintenance
+  html += `<h1 style="margin-top: 1em; margin-bottom: 1em">Maintenance</h1>\n`
   html += itemsToHtml(data, "Maintenance");
 
-  html += `<hr>\n`
   updateHtml(html);
 }
 

@@ -39,7 +39,7 @@ function itemsToHtml(data, key) {
   return html;
 }
 
-var downloadHtml = "";
+var currentHtml = "";
 
 // Generate the HTML
 function generateHTML(contents) {
@@ -110,13 +110,14 @@ function generateHTML(contents) {
 function updateHtml(html) {
   var container = document.getElementById("previewContainer");
   container.innerHTML = html;
-  downloadHtml = html;
+  currentHtml = html;
+  editor.setValue(html);
 }
 
 // Allow user to Download it (just the generated contents)
 function downloadPreviewHtml() {
   var element = document.createElement('a');
-  element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(downloadHtml));
+  element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(currentHtml));
   element.setAttribute('download', `progress-report-html-${new Date().toISOString()}.html`);
 
   element.style.display = 'none';
@@ -125,4 +126,19 @@ function downloadPreviewHtml() {
   element.click();
 
   document.body.removeChild(element);
+}
+
+ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14')
+var editor = ace.edit("editor");
+editor.setTheme("ace/theme/monokai");
+editor.session.setMode("ace/mode/html");
+editor.setShowPrintMargin(false);
+
+function showHtmlEditor() {
+  var container = document.getElementById("editorWrapper");
+  container.style.display = "unset";
+}
+
+function updateArticle() {
+  updateHtml(editor.getValue());
 }

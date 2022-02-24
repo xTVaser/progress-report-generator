@@ -1249,12 +1249,29 @@
 
                     <div id="ja-content-main" class="ja-content-main clearfix">
 
-                      <script src="previewer.js"></script>
+                      <style type="text/css" media="screen">
+                        #editor {
+                          height: 500px;
+                        }
+                      </style>
 
                       <div>
                         <button onclick="loadFile()">Upload JSON File</button>
-                        <button onclick="downloadPreviewHtml()">Download Generated HTML</button>
+                        <button onclick="showHtmlEditor()">HTML Editor</button>
+                        <button onclick="updateArticle()">Update Article From Editor</button>
+                        <button onclick="downloadPreviewHtml()">Download HTML</button>
                       </div>
+
+                      <br>
+
+                      <div id="editorWrapper" style="display: none;">
+                        <div id="editor">
+                        </div>
+                      </div>
+                      
+
+                      <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.min.js" type="text/javascript" charset="utf-8"></script>
+                      <script src="previewer.js"></script>
 
                       <br>
 
@@ -1346,8 +1363,8 @@
                             allowtransparency="true" allowfullscreen="true" scrolling="no" allow="encrypted-media"
                             style="border: medium none; visibility: visible; width: 60px; height: 28px;"
                             src="preview_files/like.htm" class="" width="1000px" height="1000px"
-                            frameborder="0"></iframe></span></div><br><a title="PS2 Home"
-                        href="http://www.ps2home.co.uk/" target="_blank" rel="noopener"><img
+                            frameborder="0"></iframe></span>
+                      </div><br><a title="PS2 Home" href="http://www.ps2home.co.uk/" target="_blank" rel="noopener"><img
                           style="vertical-align: middle; margin-top: 10px;" title="PS2 Home Banner"
                           src="preview_files/PS2-Home-Banner.webp" alt="PS2 Home" width="148" height="82"></a>
                       <p></p>

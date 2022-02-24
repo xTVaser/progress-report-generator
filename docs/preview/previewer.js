@@ -133,6 +133,7 @@ var editor = ace.edit("editor");
 editor.setTheme("ace/theme/monokai");
 editor.session.setMode("ace/mode/html");
 editor.setShowPrintMargin(false);
+editor.session.setUseWrapMode(true);
 
 function showHtmlEditor() {
   var container = document.getElementById("editorWrapper");

@@ -65,6 +65,9 @@
           <v-btn class="ma-2" text color="blue lighten-2" @click="saveReport()">
             Save Report
           </v-btn>
+          <v-btn class="ma-2" text color="blue lighten-2" @click="exportReport()">
+            Export as Markdown
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -506,6 +509,47 @@ export default {
       );
       a.dispatchEvent(e);
     },
+    exportReport: function() {
+      let markdownData = "";
+      for (const [key, value] of Object.entries(this.reportData.items)) {
+        if (value.length > 0) {
+          markdownData += `## ${key}\n\n`;
+          for (let i = 0; i < value.length; i++) {
+            const entry = value[i];
+            if (!("disabled" in entry) || !entry.disabled) {
+              markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title}" authors="${entry.authorName}" >}}\n\n`;
+              if ("description" in entry) {
+                markdownData += entry.description + "\n\n";
+              }
+            }
+          }
+        }
+      }
+      const blob = new Blob([markdownData], { type: "text/plain" });
+      const e = document.createEvent("MouseEvents"),
+        a = document.createElement("a");
+      a.download = `${this.reportData.name}.md`;
+      a.href = window.URL.createObjectURL(blob);
+      a.dataset.downloadurl = ["text/json", a.download, a.href].join(":");
+      e.initEvent(
+        "click",
+        true,
+        false,
+        window,
+        0,
+        0,
+        0,
+        0,
+        0,
+        false,
+        false,
+        false,
+        false,
+        0,
+        null
+      );
+      a.dispatchEvent(e);
+    }
   },
 };
 </script>

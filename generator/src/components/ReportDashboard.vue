@@ -517,9 +517,9 @@ export default {
           for (let i = 0; i < value.length; i++) {
             const entry = value[i];
             if (!("disabled" in entry) || !entry.disabled) {
-              markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title}" authors="${entry.authorName}" >}}\n\n`;
+              markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title.replaceAll("\"", "\\\"")}" authors="${entry.authorName}" >}}\n\n`;
               if ("description" in entry) {
-                markdownData += entry.description + "\n\n";
+                markdownData += entry.description.replaceAll("\"", "\\\"") + "\n\n";
               }
             }
           }

@@ -277,7 +277,7 @@ export default {
           color: "#ef5350",
         },
         Ambiguous: {
-          labels: [],
+          labels: ["Commit Release"],
           color: "inherit",
         },
       },
@@ -336,13 +336,19 @@ export default {
     },
     loadPrData: async function (file) {
       let prData = await this.fileToJSON(file);
-      for (var i = 0; i < prData.length; i++) {
+      for (let i = 0; i < prData.length; i++) {
         let pr = prData[i];
         const category =
           pr.categoryOverride == undefined || pr.categoryOverride === ""
             ? this.identifyCategory(pr.labels)
             : pr.categoryOverride;
         this.reportData.items[category].push(pr);
+      }
+      // Sort from oldest to newest
+      for (let [, entries] of Object.entries(this.reportData.items)) {
+        entries.sort(function(a,b) {
+          return new Date(a.mergedAt) - new Date(b.mergedAt);
+        });
       }
       this.updateCategoryLabels();
       this.fileLoaded = true;
@@ -517,7 +523,11 @@ export default {
           for (let i = 0; i < value.length; i++) {
             const entry = value[i];
             if (!("disabled" in entry) || !entry.disabled) {
-              markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title.replaceAll("\"", "\\\"")}" authors="${entry.authorName}" >}}\n\n`;
+              if (entry.isPR) {
+                markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title.replaceAll("\"", "\\\"")}" authors="${entry.authorName}" >}}\n\n`;
+              } else {
+                markdownData += `{{< progress/github-link shas="${entry.sha}" title="${entry.title.replaceAll("\"", "\\\"")}" authors="${entry.authorName}" >}}\n\n`;
+              }
               if ("description" in entry) {
                 markdownData += entry.description.replaceAll("\"", "\\\"") + "\n\n";
               }

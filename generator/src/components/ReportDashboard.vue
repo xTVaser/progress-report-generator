@@ -258,7 +258,7 @@ export default {
           color: "#b2dfdb",
         },
         GUI: {
-          labels: ["GUI/WX", "Translations", "GUI/Windows", "GUI/GTX"],
+          labels: ["GUI/WX", "Translations", "GUI/Windows", "GUI/GTX", "GUI/Qt"],
           color: "#303f9f",
         },
         Maintenance: {
@@ -517,19 +517,52 @@ export default {
     },
     exportReport: function() {
       let markdownData = "";
-      for (const [key, value] of Object.entries(this.reportData.items)) {
-        if (value.length > 0) {
-          markdownData += `## ${key}\n\n`;
-          for (let i = 0; i < value.length; i++) {
-            const entry = value[i];
-            if (!("disabled" in entry) || !entry.disabled) {
-              if (entry.isPR) {
-                markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title.replaceAll("\"", "\\\"")}" authors="${entry.authorName}" >}}\n\n`;
-              } else {
-                markdownData += `{{< progress/github-link shas="${entry.sha}" title="${entry.title.replaceAll("\"", "\\\"")}" authors="${entry.authorName}" >}}\n\n`;
-              }
-              if ("description" in entry) {
-                markdownData += entry.description.replaceAll("\"", "\\\"") + "\n\n";
+      let markdownGroups = {
+        "Core Improvements": [
+          "CDVD",
+          "Counters",
+          "VU",
+          "MTVU",
+          "microVU",
+          "GIF",
+          "VIF",
+          "SPU2",
+          "PAD",
+          "USB",
+          "DEV9",
+          "IPU",
+          "Debugger",
+          "Input Recording",
+          "Miscellanous Core"
+        ],
+        "GS Improvements": [
+          "GS"
+        ],
+        "Misc Improvements": [
+          "GUI",
+          "Maintenance",
+          "Other",
+          "Ambiguous"
+        ]
+      };
+      markdownData += `## Introduction\n\n`;
+      for (const [key, value] of Object.entries(markdownGroups)) {
+        markdownData += `## ${key}\n\n`;
+        for (let reportCategory of value) {
+          let reportItems = this.reportData.items[reportCategory];
+          if (reportItems.length > 0) {
+            markdownData += `### ${reportCategory}\n\n`;
+            for (let i = 0; i < reportItems.length; i++) {
+              const entry = reportItems[i];
+              if (!("disabled" in entry) || !entry.disabled) {
+                if (entry.isPR) {
+                  markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title.replaceAll("\"", "\\\"").replaceAll("\n", "")}" authors="${entry.authorName}" >}}\n\n`;
+                } else {
+                  markdownData += `{{< progress/github-link shas="${entry.sha}" title="${entry.title.replaceAll("\"", "\\\"").replaceAll("\n", "")}" authors="${entry.authorName}" >}}\n\n`;
+                }
+                if ("description" in entry) {
+                  markdownData += entry.description.replaceAll("\"", "\\\"") + "\n\n";
+                }
               }
             }
           }

@@ -555,10 +555,14 @@ export default {
             for (let i = 0; i < reportItems.length; i++) {
               const entry = reportItems[i];
               if (!("disabled" in entry) || !entry.disabled) {
+                let authorMarkdown = ``;
+                if (entry.authorName !== undefined && entry.authorName !== null) {
+                  authorMarkdown = `authors="${entry.authorName}"`;
+                }
                 if (entry.isPR) {
-                  markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title.replaceAll("\"", "\\\"").replaceAll("\n", "")}" authors="${entry.authorName}" >}}\n\n`;
+                  markdownData += `{{< progress/github-link prNums="${entry.url.split("pull/")[1]}" title="${entry.title.replaceAll("\"", "\\\"").replaceAll("\n", "")}" ${authorMarkdown} >}}\n\n`;
                 } else {
-                  markdownData += `{{< progress/github-link shas="${entry.sha}" title="${entry.title.replaceAll("\"", "\\\"").replaceAll("\n", "")}" authors="${entry.authorName}" >}}\n\n`;
+                  markdownData += `{{< progress/github-link shas="${entry.sha}" title="${entry.title.replaceAll("\"", "\\\"").replaceAll("\n", "")}" ${authorMarkdown} >}}\n\n`;
                 }
                 if ("description" in entry) {
                   markdownData += entry.description.replaceAll("\"", "\\\"") + "\n\n";
